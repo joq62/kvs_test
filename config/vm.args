@@ -1,0 +1,6 @@
+-sname kvs_test
+
+-setcookie a
+
++K true
++A30

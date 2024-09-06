@@ -1,0 +1,54 @@
+ mkdir add_test
+ cd add_test
+ cp -r ../template/* .
+ %% config
+ emacs config/sys.config
+ >> temp->add_test
+ emacs config/vm.args
+ >> -sname temp -> add_test
+ %% rebar.config
+emacs rebar.config
+{relx, [{release, {temp, "0.1.0"}, -> {relx, [{release, {add_test, "0.1.0"},
+temp->add_test
+
+%% Src
+mv apps/temp/ apps/add_test
+cd apps/add_test/
+mv include/temp.rd include/add_test.rd
+emacs include/add_test.rd
+>> -define(LocalResourceTuples,[{add_test,{add_test,node()}}]).
+cd src
+mv temp.app.src add_test.app.src
+mv temp.erl add_test.erl
+mv temp_sup.erl add_test_sup.erl
+mv temp_app.erl add_test_app.erl
+emacs add_test.app.src
+>> temp->add_test
+emacs add_test.erl
+>> temp->add_test
+emacs add_test_sup.erl
+>> temp->add_test
+emacs add_test_app.erl
+>> temp->add_test
+cd ../../../test
+emacs all.erl
+-define(Vm,add_test@c50).
+-define(Foreground,"./_build/default/rel/add_test/bin/add_test foreground").
+-define(Daemon,"./_build/default/rel/add_test/bin/add_test daemon").
+ %% Change
+    pong=rpc:call(?Vm,add_test,ping,[],5000),
+    
+%% corr to relevant test cases in all
+
+%% git
+git init
+git branch -m main
+make clean
+make
+git add *
+git commit -m "created"
+git remote add origin https://github.com/joq62/add_test.git
+git branch -M main
+git push -u origin main
+
+** END **
